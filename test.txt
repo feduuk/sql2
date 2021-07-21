@@ -1,0 +1,37 @@
+hw2=# SELECT sfn, sln, (SELECT COUNT(*)
+hw2(# FROM s AS s2
+hw2(# WHERE s1.sfn = s2.sfn AND
+hw2(# s1.sln = s2.sln
+hw2(# GROUP BY sfn, sln
+hw2(# HAVING COUNT(*) > 1) AS count_of_duplicates
+hw2-# FROM s AS s1
+hw2-# WHERE EXISTS (SELECT COUNT(*)
+hw2(# FROM s AS s2
+hw2(# WHERE s1.sfn = s2.sfn AND
+hw2(# s1.sln = s2.sln
+hw2(# GROUP BY sfn, sln
+hw2(# HAVING COUNT(*) > 1)
+hw2-# GROUP BY sfn, sln;
+ sfn | sln | count_of_duplicates
+-----+-----+---------------------
+(0 строк)
+
+
+hw2=# SELECT *
+hw2-# FROM f AS f1
+hw2-# WHERE dur > 30 AND
+hw2-# EXISTS(
+hw2(# SELECT f1.dt - f2.dt
+hw2(# FROM f AS f2
+hw2(# WHERE f1.ks = f2.ks AND
+hw2(# f2.dt < f1.dt AND
+hw2(# dur < 3 AND
+hw2(# f1.dt - f2.dt = (
+hw2(# SELECT MIN(f3.dt - f2.dt)
+hw2(# FROM f AS f3
+hw2(# WHERE f2.ks = f3.ks AND
+hw2(# f3.dt > f2.dt));
+ idcall |  ks  |           dt           | dur
+--------+------+------------------------+-----
+ 120004 | 1000 | 2018-01-09 10:00:00+03 |  40
+(1 строка)
